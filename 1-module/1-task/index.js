@@ -1,7 +1,7 @@
 function factorial(n) {
-  let f = 1;
+  let factorialMultiply = 1;
   for (let i = 1; i <= n; i++) {
-    f *= i;
+    factorialMultiply *= i;
   }
-  return f;
+  return factorialMultiply;
 }
