@@ -8,6 +8,7 @@ let calculator = {
     for (let i = 1; i < this.value.length; i++) {
       sum += this.value[i];
     }
+    calculator.deleteValue();
     return sum;
   },
   mul: function () {
@@ -15,8 +16,12 @@ let calculator = {
     for (let i = 1; i < this.value.length; i++) {
       mul *= this.value[i];
     }
+    calculator.deleteValue();
     return mul;
   },
+  deleteValue: function () {
+    this.value = [];
+  }
 };
 
 // НЕ УДАЛЯТЬ СТРОКУ, НУЖНА ДЛЯ ПРОВЕРКИ
