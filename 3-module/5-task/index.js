@@ -1,7 +1,5 @@
 function getMinMax(str) {
-  let arr = str.split(' ').filter(function(item) {
-    if (!isNaN(parseInt(item))) return item;
-  });
+  let arr = str.split(' ').filter(item => !isNaN(parseInt(item)));
   let result = {
     min: 0,
     max: 0,
