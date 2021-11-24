@@ -1,16 +1,6 @@
 function makeFriendsList(friends) {
 	let ul = document.createElement('ul');
-
-	let user = friends.map(function(user) {
-		let name = '';
-		for (let key in user) {
-			name += user[key] + ' ';
-		}
-		return name.slice(0, -1);
-	});
-	for (let i = 0; i < user.length; i++) {
-		let li = '<li>' + user[i] + '</li>';
-		ul.insertAdjacentHTML('afterBegin',	li);
-	}
+	let li = friends.map(user => '<li>' + user.firstName + ' ' + user.lastName + '</li>').join('');
+	ul.insertAdjacentHTML('afterBegin',	li);
 	return ul;
 }
