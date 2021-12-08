@@ -42,25 +42,31 @@ export default class Carousel {
     let arrowLeft = this._container.querySelector('.carousel__arrow_left');
     let arrowRight = this._container.querySelector('.carousel__arrow_right');
     let positionSlide = 0;    
-  
+    arrowLeft.style.display = 'none';
+
     arrowRight.addEventListener('click', function() {
       slides.style.transform = 'translateX(-' + (slides.offsetWidth + positionSlide) + 'px)';
-      positionSlide += slides.offsetWidth;      
+      positionSlide += slides.offsetWidth;
+      positionSlide > 0 ? arrowLeft.style.display = '' : false; 
+      positionSlide == slides.offsetWidth * 3 ? arrowRight.style.display = 'none' : false;
     });
     arrowLeft.addEventListener('click', function(event) {
       slides.style.transform = 'translateX(' + (slides.offsetWidth - positionSlide) + 'px)';
-      positionSlide -= slides.offsetWidth;     
+      positionSlide -= slides.offsetWidth;
+      positionSlide == 0 ? arrowLeft.style.display = 'none' : false;
+      positionSlide < slides.offsetWidth * 3 ? arrowRight.style.display = '' : false;
     });
-    // не сделал hiddenArrow  
   }
   _addToCard() {
-    console.log(this.slides[0].id);
-    let productAdd = new CustomEvent("product-add", {
-      detail: this.slides[0].id, // не придумал как передать id
+    this._container.querySelectorAll('.carousel__button').forEach(elem => {
+      elem.addEventListener('click', event => {this._getId(event)});
+    });    
+  }
+  _getId(elem) {
+    let productAdd = new CustomEvent('product-add', {
+      detail: elem.currentTarget.parentElement.parentElement.getAttribute('data-id'), // самому страшно смотреть на это
       bubbles: true
     });
-    this._container.querySelectorAll('.carousel__button').forEach(elem => {
-      elem.addEventListener('click', event => {event.target.dispatchEvent(productAdd);});
-    });
+    elem.currentTarget.dispatchEvent(productAdd);
   }
 }
