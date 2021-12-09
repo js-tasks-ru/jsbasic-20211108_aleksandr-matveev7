@@ -38,24 +38,37 @@ export default class Carousel {
     return slides;
   }
   _initCarousel() {
-    let slides = this._container.querySelector('.carousel__inner');
-    let arrowLeft = this._container.querySelector('.carousel__arrow_left');
-    let arrowRight = this._container.querySelector('.carousel__arrow_right');
-    let positionSlide = 0;    
-    arrowLeft.style.display = 'none';
+    const slides = this._container.querySelector('.carousel__inner');
+    const arrowLeft = this._container.querySelector('.carousel__arrow_left');
+    const arrowRight = this._container.querySelector('.carousel__arrow_right');
+    let positionSlide = 0;
+    arrowHidden(); 
 
-    arrowRight.addEventListener('click', function() {
-      slides.style.transform = 'translateX(-' + (slides.offsetWidth + positionSlide) + 'px)';
-      positionSlide += slides.offsetWidth;
-      positionSlide > 0 ? arrowLeft.style.display = '' : false; 
-      positionSlide == slides.offsetWidth * 3 ? arrowRight.style.display = 'none' : false;
+    this._container.querySelectorAll('.carousel__arrow').forEach(elem => {
+      elem.addEventListener('click', event => {
+        if (event.currentTarget.classList.contains("carousel__arrow_right")) {
+          slides.style.transform = 'translateX(-' + (slides.offsetWidth + positionSlide) + 'px)';
+          positionSlide += slides.offsetWidth;
+          arrowHidden();
+        } else {
+          slides.style.transform = 'translateX(' + (slides.offsetWidth - positionSlide) + 'px)';
+          positionSlide -= slides.offsetWidth;
+          arrowHidden();
+        }        
+      });
     });
-    arrowLeft.addEventListener('click', function(event) {
-      slides.style.transform = 'translateX(' + (slides.offsetWidth - positionSlide) + 'px)';
-      positionSlide -= slides.offsetWidth;
-      positionSlide == 0 ? arrowLeft.style.display = 'none' : false;
-      positionSlide < slides.offsetWidth * 3 ? arrowRight.style.display = '' : false;
-    });
+    function arrowHidden() {
+      if (positionSlide == 0) { 
+        arrowLeft.style.display = 'none';
+        arrowRight.style.display = '';        
+      } else if (positionSlide < slides.offsetWidth * 3) {
+         arrowRight.style.display = '';
+         arrowLeft.style.display = '';
+      } else {
+        arrowRight.style.display = 'none';
+        
+      }
+    }
   }
   _addToCard() {
     this._container.querySelectorAll('.carousel__button').forEach(elem => {
