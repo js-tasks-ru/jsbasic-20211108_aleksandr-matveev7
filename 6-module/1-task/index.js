@@ -43,8 +43,6 @@ export default class UserTable {
     `;
     let users = table.querySelectorAll('tr');
     users.forEach( (item) => item.addEventListener('click', (event) => event.target.innerHTML == 'X' ? event.currentTarget.remove() : false));
-    // let buttonDel = table.querySelectorAll('button'); item.parentElement.parentElement.remove(); - находим button, удаляем родителя родителя
-    // let users = table.querySelectorAll('tr'); event.target.innerHTML == 'X' || event.target == table.querySelector('tr > td > button') - находим tr и проверяем клик по кнопке 
     return table;
   }
 }

@@ -38,6 +38,7 @@ export default class Carousel {
     return slides;
   }
   _initCarousel() {
+    const amountSlides = this.slides.length - 1;
     const slides = this._container.querySelector('.carousel__inner');
     const arrowLeft = this._container.querySelector('.carousel__arrow_left');
     const arrowRight = this._container.querySelector('.carousel__arrow_right');
@@ -61,7 +62,7 @@ export default class Carousel {
       if (positionSlide == 0) { 
         arrowLeft.style.display = 'none';
         arrowRight.style.display = '';        
-      } else if (positionSlide < slides.offsetWidth * 3) {
+      } else if (positionSlide < slides.offsetWidth * amountSlides) {
          arrowRight.style.display = '';
          arrowLeft.style.display = '';
       } else {
@@ -77,7 +78,7 @@ export default class Carousel {
   }
   _getId(elem) {
     let productAdd = new CustomEvent('product-add', {
-      detail: elem.currentTarget.parentElement.parentElement.getAttribute('data-id'), // самому страшно смотреть на это
+      detail: elem.currentTarget.parentElement.parentElement.dataset.id, // самому страшно смотреть на это
       bubbles: true
     });
     elem.currentTarget.dispatchEvent(productAdd);
