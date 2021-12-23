@@ -12,7 +12,37 @@
  *      }
  *
  */
+
 export default class UserTable {
   constructor(rows) {
+    this.elem = this._creatTable(rows);
+  }
+  _creatTable(items) {
+    const table = document.createElement('table');
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Возраст</th>
+          <th>Зарплата</th>
+          <th>Город</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        ${items.map(item => `
+        <tr>
+          <td>${item.name}</td>
+          <td>${item.age}</td>
+          <td>${item.salary}</td>
+          <td>${item.city}</td>
+          <td><button>X</button></td>
+        </tr>
+        `).join('')}
+      </tbody>
+    `;
+    let users = table.querySelectorAll('tr');
+    users.forEach( (item) => item.addEventListener('click', (event) => event.target.innerHTML == 'X' ? event.currentTarget.remove() : false));
+    return table;
   }
 }
