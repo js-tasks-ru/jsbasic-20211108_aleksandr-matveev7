@@ -26,14 +26,16 @@ export default class Modal {
                     </div>
                   `;
     let escape = (event) => {      
-      if(event.code === 'Escape') console.log(this.close());
-      document.removeEventListener('keydown', escape, false);
+      if(event.code === 'Escape' && document.querySelector('.modal')) {
+        this.close();
+        document.removeEventListener('keydown', escape, false);
+      }
     }
-    document.querySelector('.container').innerHTML = modal;
+    document.body.insertAdjacentHTML("afterbegin", modal);
     document.querySelector('.modal__body').innerHTML = '';
     document.querySelector('.modal__body').append(this._body);
     document.querySelector('.modal__close').addEventListener('click', this.close);
-    document.addEventListener('keydown', escape);
+    document.addEventListener('keyup', escape);
   }
   setTitle(title) {
     this._title = title;

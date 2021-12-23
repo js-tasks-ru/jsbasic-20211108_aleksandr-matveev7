@@ -27,32 +27,37 @@ export default class StepSlider {
   
   _dragNDrop(steps, value) {
 
-    let slider = this._container;
-    let thumb = this._container.querySelector('.slider__thumb');
-    let progress = this._container.querySelector('.slider__progress');
+    const slider = this._container;
+    const thumb = this._container.querySelector('.slider__thumb');
+    const progress = this._container.querySelector('.slider__progress');
+    const sliderValue = slider.querySelector('.slider__value');
     let index = value;
 
-      /* костыль чтобы работал с другим value */
-    let percent = 100 / (steps - 1) * index;
-    thumb.style.left = percent + '%';
-    progress.style.width = percent + '%';
-    slider.querySelector('.slider__value').innerHTML = index;
-    slider.querySelectorAll('.slider__steps > span').forEach( elem => elem.classList.remove('slider__step-active'));
-    slider.querySelectorAll('.slider__steps > span')[index].classList.add('slider__step-active');
+    function fixed() {
+      thumb.style.left = 100 / (steps - 1) * index + '%';
+      progress.style.width = 100 / (steps - 1) * index + '%';
 
-    slider.addEventListener('click', event => {
-      let index = (event.clientX - event.currentTarget.offsetLeft) / (event.currentTarget.offsetWidth / (steps - 1));
-      index = Math.round(index);
-      slider.querySelector('.slider__value').innerHTML = index;
-      slider.querySelectorAll('.slider__steps > span').forEach( elem => elem.classList.remove('slider__step-active'));
-      slider.querySelectorAll('.slider__steps > span')[index].classList.add('slider__step-active');
-      slider.querySelector('.slider__thumb').style.left = event.currentTarget.offsetWidth / (steps - 1) * index / event.currentTarget.offsetWidth * 100 + '%';
-      slider.querySelector('.slider__progress').style.width = event.currentTarget.offsetWidth / (steps - 1) * index / event.currentTarget.offsetWidth * 100 + '%';
       const sliderChange = new CustomEvent('slider-change', {
         detail: index,
         bubbles: true 
       });
       slider.dispatchEvent(sliderChange);
+    }
+
+      /* костыль чтобы работал с другим value */
+    let percent = 100 / (steps - 1) * index;
+    thumb.style.left = percent + '%';
+    progress.style.width = percent + '%';
+    sliderValue.innerHTML = index;
+    slider.querySelectorAll('.slider__steps > span').forEach( elem => elem.classList.remove('slider__step-active'));
+    slider.querySelectorAll('.slider__steps > span')[index].classList.add('slider__step-active');
+
+    slider.addEventListener('click', event => {
+      index = Math.round((event.clientX - event.currentTarget.offsetLeft) / (event.currentTarget.offsetWidth / (steps - 1)));
+      sliderValue.innerHTML = index;
+      slider.querySelectorAll('.slider__steps > span').forEach( elem => elem.classList.remove('slider__step-active'));
+      slider.querySelectorAll('.slider__steps > span')[index].classList.add('slider__step-active');
+      fixed();      
     });
     
     thumb.addEventListener('pointerdown', () => {
@@ -71,7 +76,7 @@ export default class StepSlider {
         }
         thumb.style.left = percent + '%';
         progress.style.width = percent + '%';
-        slider.querySelector('.slider__value').innerHTML = index;
+        sliderValue.innerHTML = index;
         slider.querySelectorAll('.slider__steps > span').forEach( elem => elem.classList.remove('slider__step-active'));
         slider.querySelectorAll('.slider__steps > span')[index].classList.add('slider__step-active');
       }
@@ -81,20 +86,9 @@ export default class StepSlider {
         moveAt();
       }
 
-      function fixed() {
-        thumb.style.left = 100 / (steps - 1) * index + '%';
-        progress.style.width = 100 / (steps - 1) * index + '%';
-        console.log(index);
-        const sliderChange = new CustomEvent('slider-change', {
-          detail: index,
-          bubbles: true 
-        });
-        slider.dispatchEvent(sliderChange);
-      }
-
       document.addEventListener('pointermove', onMouseMove);
 
-      document.onmouseup = () => {
+      document.onpointerup = () => {
         document.removeEventListener('pointermove', onMouseMove);
         thumb.onmouseup = null;
         fixed();
